@@ -1,0 +1,29 @@
+{
+  "name": "antfarm",
+  "version": "1.0.0",
+  "description": "A simulated ant farm using p5.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "http-server . -p 3000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rpalo/antfarm.git"
+  },
+  "keywords": [
+    "p5",
+    "simulation",
+    "ants",
+    "nature"
+  ],
+  "author": "Ryan Palo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rpalo/antfarm/issues"
+  },
+  "homepage": "https://github.com/rpalo/antfarm#readme",
+  "devDependencies": {
+    "http-server": "^0.10.0"
+  }
+}
