@@ -1,8 +1,13 @@
+let a;
+
 function setup() {
   createCanvas(600, 400);
   background(255);
+  a = new Ant();
 }
 
 function draw() {
-  ellipse(width/2, height/2, 50, 50);
+  background(255);
+  a.show();
 }
+
