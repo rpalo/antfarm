@@ -21,8 +21,15 @@ function draw() {
   pop();
   a.update();
   a.show();
-  foodList.forEach( food => {
-    food.show();
-  });
+  for (let i=foodList.length-1; i>=0; i--) {
+    if (foodList[i].size <= 0) {
+      foodList.splice(i, 1);
+    } else {
+      foodList[i].show();
+    }
+  }
+  if (foodList.length == 0) {
+    noLoop();
+  }
 }
 
