@@ -41,6 +41,7 @@ class ForagerAnt extends Ant {
     this.motionOffset = 20; // Offset to noise function
     this.senseRadius = 50;
     this.target = undefined;
+    this.food = 0;
   }
 
   search() {
@@ -56,14 +57,38 @@ class ForagerAnt extends Ant {
     });
   }
 
-  hunt(desired) {
-    const adjustment = p5.Vector.sub(desired.position, this.position);
+  hunt(location) {
+    const adjustment = p5.Vector.sub(location, this.position);
     this.applyForce(adjustment);
   }
 
-  update() {
+  goHome() {
+    this.hunt(this.home);
+  }
+
+  isCloseToTarget() {
     if (this.target != undefined) {
-      this.hunt(this.target);
+      const d = dist(this.target.position.x,
+                    this.target.position.y,
+                    this.position.x,
+                    this.position.y);
+      return d < 5;
+    } else {
+      return false;
+    }
+  }
+
+  collectFood(food) {
+    this.food = food.take(5);
+  }
+
+  update() {
+    if (this.food > 0) {
+      this.goHome();
+    } else if (this.isCloseToTarget()) {
+      this.collectFood(this.target);
+    } else if (this.target != undefined) {
+      this.hunt(this.target.position);
     } else {
       this.search();
     }
