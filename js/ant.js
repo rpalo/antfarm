@@ -3,7 +3,16 @@
 class Ant {
 
   constructor() {
-    this.position = createVector(width/2, height/2);
+    this.home = createVector(width/2, height/2);
+    this.position = createVector(width / 2, height / 2);
+    this.velocity = createVector(0, 0);
+    this.acceleration = createVector(0, 0);
+    this.maxForce = 1;
+    this.maxSpeed = 2;
+  }
+
+  applyForce(force) {
+    this.acceleration.add(force);
   }
 
   show() {
@@ -14,34 +23,59 @@ class Ant {
     ellipse(0, 0, 10, 10);
     pop();
   }
-}
-
-class ForagerAnt extends Ant {
-
-  constructor() {
-    super();
-    this.velocity = createVector(0, 0);
-    this.acceleration = createVector(0, 0);
-    this.motionOffset = 20; // Offset to noise function
-    this.maxForce = 1;
-    this.maxSpeed = 2;
-  }
-
-  search () {
-    let newHeading = noise(this.motionOffset + frameCount) * 360;
-    this.applyForce(p5.Vector.fromAngle(newHeading));
-  }
-
-  applyForce(force) {
-    this.acceleration.add(force);
-  }
 
   update() {
-    this.search();
     this.acceleration.limit(this.maxForce);
     this.velocity.add(this.acceleration);
     this.velocity.limit(this.maxSpeed);
     this.position.add(this.velocity);
     this.acceleration.setMag(0);
+  }
+}
+
+class ForagerAnt extends Ant {
+
+  constructor(foodList) {
+    super();
+    this.foodList = foodList;
+    this.motionOffset = 20; // Offset to noise function
+    this.senseRadius = 50;
+    this.target = undefined;
+  }
+
+  search() {
+    let newHeading = noise(this.motionOffset + frameCount) * 360;
+    this.applyForce(p5.Vector.fromAngle(newHeading));
+    let d;
+    let sensedFoods = [];
+    this.foodList.forEach( food => {
+      d = dist(food.position.x, food.position.y, this.position.x, this.position.y);
+      if (d < this.senseRadius) {
+        this.target = food;
+      }
+    });
+  }
+
+  hunt(desired) {
+    const adjustment = p5.Vector.sub(desired.position, this.position);
+    this.applyForce(adjustment);
+  }
+
+  update() {
+    if (this.target != undefined) {
+      this.hunt(this.target);
+    } else {
+      this.search();
+    }
+    super.update();
+  }
+
+  show() {
+    super.show();
+    push();
+    noStroke();
+    fill('rgba(255, 0, 0, .2)');
+    ellipse(this.position.x, this.position.y, this.senseRadius, this.senseRadius);
+    pop();
   }
 }

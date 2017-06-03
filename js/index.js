@@ -1,19 +1,23 @@
-let a, f1, f2;
+let a, foodList;
 
 function setup() {
   createCanvas(600, 400);
   background(255);
   angleMode(DEGREES);
-  a = new ForagerAnt();
-  f1 = new Foodpile();
-  f2 = new Foodpile();
+  foodList = [];
+  for (let i=0; i<4; i++) {
+    foodList.push(new Foodpile());
+  }
+  a = new ForagerAnt(foodList);
+  
 }
 
 function draw() {
   background(255);
   a.update();
   a.show();
-  f1.show();
-  f2.show();
+  foodList.forEach( food => {
+    food.show();
+  });
 }
 

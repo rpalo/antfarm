@@ -21,6 +21,7 @@ class Foodpile {
         fill("yellow");
         translate(this.position.x, this.position.y);
         ellipse(0, 0, this.size, this.size);
+        pop();
     }
 
 
