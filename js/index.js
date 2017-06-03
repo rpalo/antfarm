@@ -1,4 +1,4 @@
-let a, foodList;
+let a, gruntList, foodList, pheremoneList;
 
 function setup() {
   createCanvas(600, 400);
@@ -6,6 +6,8 @@ function setup() {
   angleMode(DEGREES);
   rectMode(CENTER)
   foodList = [];
+  gruntList = [];
+  pheremoneList = [];
   for (let i=0; i<4; i++) {
     foodList.push(new Foodpile());
   }
