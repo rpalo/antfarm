@@ -66,29 +66,35 @@ class ForagerAnt extends Ant {
     this.hunt(this.home);
   }
 
-  isCloseToTarget() {
-    if (this.target != undefined) {
-      const d = dist(this.target.position.x,
-                    this.target.position.y,
+  isCloseTo(location) {
+    const d = dist(location.x,
+                    location.y,
                     this.position.x,
                     this.position.y);
-      return d < 5;
-    } else {
-      return false;
-    }
+    return d < 5;
   }
 
   collectFood(food) {
     this.food = food.take(5);
+    this.target = undefined;
+  }
+  storeFood() {
+    this.food = 0;
   }
 
   update() {
     if (this.food > 0) {
-      this.goHome();
-    } else if (this.isCloseToTarget()) {
+      if (this.isCloseTo(this.home)) {
+        this.storeFood();
+      } else {
+        this.goHome();
+      }
+    } else if (this.target) {
+      if (this.isCloseTo(this.target.position)) {
       this.collectFood(this.target);
-    } else if (this.target != undefined) {
+      } else {
       this.hunt(this.target.position);
+      }
     } else {
       this.search();
     }
@@ -99,7 +105,11 @@ class ForagerAnt extends Ant {
     super.show();
     push();
     noStroke();
-    fill('rgba(255, 0, 0, .2)');
+    if (this.food > 0) {
+      fill('rgba(0, 255, 0, .2)');
+    } else {
+      fill('rgba(255, 0, 0, .2)');
+    }
     ellipse(this.position.x, this.position.y, this.senseRadius, this.senseRadius);
     pop();
   }
